@@ -26,13 +26,13 @@ a.rounded-full:active, #submitBtn:not(:disabled):active { transform: translateY(
 
 /* ---- Hero entrance ---- */
 @keyframes fadeUp { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: none; } }
-.hero-fade { animation: fadeUp .8s cubic-bezier(.22,.61,.36,1) both; }
+.hero-fade { animation: fadeUp .9s cubic-bezier(.16,1,.3,1) both; }
 .hero-fade-1 { animation-delay: .05s } .hero-fade-2 { animation-delay: .18s }
 .hero-fade-3 { animation-delay: .31s } .hero-fade-4 { animation-delay: .44s }
 
 /* ---- Scroll-in reveal (classes added by JS) ---- */
 .anim { opacity: 0; transform: translateY(24px);
-        transition: opacity .65s ease, transform .65s cubic-bezier(.22,.61,.36,1); }
+        transition: opacity .7s ease, transform .8s cubic-bezier(.16,1,.3,1); will-change: opacity, transform; }
 .anim.in-view { opacity: 1; transform: none; }
 
 /* ---- Cards ---- */
@@ -54,6 +54,10 @@ a.rounded-full:active, #submitBtn:not(:disabled):active { transform: translateY(
                         color: #d6d3d1; font-size: .85rem; }
 @keyframes lbFade  { from { opacity: 0 } to { opacity: 1 } }
 @keyframes lbZoom  { from { transform: scale(.94); opacity: .4 } to { transform: scale(1); opacity: 1 } }
+
+/* ---- Footer ---- */
+footer > * { transition: opacity .7s ease, transform .8s cubic-bezier(.16,1,.3,1); }
+footer > *:not(.anim) { opacity: 1; transform: none; }
 
 /* ---- Accessibility: reduced motion ---- */
 @media (prefers-reduced-motion: reduce) {
