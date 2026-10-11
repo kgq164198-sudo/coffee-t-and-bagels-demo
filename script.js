@@ -52,6 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
       ...document.querySelectorAll('#gallery img'),
       ...document.querySelectorAll('#reviews .grid > div'),
       ...document.querySelectorAll('#contact .grid > *'),
+      ...document.querySelectorAll('footer > *'),
     ];
     // delay by position within each parent, so each row cascades cleanly
     const byParent = new Map();
