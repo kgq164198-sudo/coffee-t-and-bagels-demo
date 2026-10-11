@@ -1,0 +1,15 @@
+/* Coffee T and Bagels — site styles */
+html { scroll-behavior: smooth; }
+body { font-family: 'Inter', sans-serif; }
+h1, h2, .display { font-family: 'Playfair Display', serif; }
+
+::selection { background: #f59e0b; color: #1c1917; }
+
+/* Nav shadow when scrolled */
+#siteNav { transition: box-shadow .3s ease; }
+#siteNav.nav-scrolled { box-shadow: 0 4px 18px rgba(0,0,0,.35); }
+
+/* Fade-in on scroll (added by JS only, so no-JS visitors see everything) */
+.anim { opacity: 0; transform: translateY(18px); transition: opacity .6s ease, transform .6s ease; }
+.anim.in-view { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) { .anim { transition: none; opacity: 1; transform: none; } }
