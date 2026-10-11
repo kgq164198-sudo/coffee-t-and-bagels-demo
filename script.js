@@ -8,13 +8,31 @@ document.addEventListener('DOMContentLoaded', () => {
   const year = document.getElementById('year');
   if (year) year.textContent = new Date().getFullYear();
 
+  // ---- Premium smooth scrolling (Lenis) ----
+  let lenis = null;
+  if (!reduceMotion && typeof Lenis !== 'undefined') {
+    try {
+      lenis = new Lenis({ duration: 1.15, easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)) });
+      const raf = time => { lenis.raf(time); requestAnimationFrame(raf); };
+      requestAnimationFrame(raf);
+      document.documentElement.style.scrollBehavior = 'auto'; // avoid clashing with native smooth scroll
+    } catch (err) { lenis = null; }
+  }
+
   // ---- Nav: shadow + hide while scrolling down ----
   const nav = document.getElementById('siteNav');
   const mobileMenu = document.getElementById('mobileMenu');
   let lastY = window.scrollY, anchorGuard = 0;
   if (nav) {
     document.querySelectorAll('a[href^="#"]').forEach(a =>
-      a.addEventListener('click', () => { anchorGuard = Date.now() + 900; nav.classList.remove('nav-hidden'); }));
+      a.addEventListener('click', (e) => {
+        anchorGuard = Date.now() + 900; nav.classList.remove('nav-hidden');
+        const id = a.getAttribute('href');
+        if (lenis && id.length > 1 && document.querySelector(id)) {
+          e.preventDefault();
+          lenis.scrollTo(id, { offset: -76, duration: 1.3 });
+        }
+      }));
     const onScroll = () => {
       const y = window.scrollY;
       nav.classList.toggle('nav-scrolled', y > 8);
@@ -77,7 +95,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const galleryImgs = document.querySelectorAll('#gallery img');
   if (galleryImgs.length) {
     let lb = null;
-    const close = () => { if (lb) { lb.remove(); lb = null; document.body.style.overflow = ''; } };
+    const close = () => { if (lb) { lb.remove(); lb = null; document.body.style.overflow = ''; if (lenis) lenis.start(); } };
     galleryImgs.forEach(img => img.addEventListener('click', () => {
       close();
       lb = document.createElement('div');
@@ -91,6 +109,7 @@ document.addEventListener('DOMContentLoaded', () => {
       });
       document.body.appendChild(lb);
       document.body.style.overflow = 'hidden';
+      if (lenis) lenis.stop();
     }));
   }
 
