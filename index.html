@@ -196,23 +196,51 @@
         <a href="https://wa.me/19297291649" target="_blank" class="inline-block mt-2 bg-green-500 hover:bg-green-400 text-white font-semibold px-5 py-2.5 rounded-full">Message us on WhatsApp</a>
       </div>
     </div>
-    <form class="bg-stone-800 rounded-2xl p-6 space-y-4" onsubmit="event.preventDefault(); alert('Thanks! This demo form is a preview.');">
+    <form id="contactForm" class="bg-stone-800 rounded-2xl p-6 space-y-4">
+      <input type="hidden" name="source" value="coffee-t-and-bagels-demo">
       <div>
         <label class="block text-sm font-medium mb-1">Name</label>
-        <input type="text" class="w-full rounded-lg px-4 py-2.5 bg-stone-700 text-stone-100 placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-amber-400" placeholder="Your name">
+        <input name="name" required type="text" class="w-full rounded-lg px-4 py-2.5 bg-stone-700 text-stone-100 placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-amber-400" placeholder="Your name">
       </div>
       <div>
         <label class="block text-sm font-medium mb-1">Email</label>
-        <input type="email" class="w-full rounded-lg px-4 py-2.5 bg-stone-700 text-stone-100 placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-amber-400" placeholder="you@email.com">
+        <input name="email" required type="email" class="w-full rounded-lg px-4 py-2.5 bg-stone-700 text-stone-100 placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-amber-400" placeholder="you@email.com">
       </div>
       <div>
         <label class="block text-sm font-medium mb-1">Message</label>
-        <textarea rows="4" class="w-full rounded-lg px-4 py-2.5 bg-stone-700 text-stone-100 placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-amber-400" placeholder="How can we help?"></textarea>
+        <textarea name="message" required rows="4" class="w-full rounded-lg px-4 py-2.5 bg-stone-700 text-stone-100 placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-amber-400" placeholder="How can we help?"></textarea>
       </div>
-      <button type="submit" class="w-full bg-amber-500 hover:bg-amber-400 text-stone-900 font-semibold py-3 rounded-lg">Send Message</button>
+      <button id="submitBtn" type="submit" class="w-full bg-amber-500 hover:bg-amber-400 text-stone-900 font-semibold py-3 rounded-lg">Send Message</button>
+      <p id="formStatus" class="hidden text-center text-sm font-medium rounded-lg px-4 py-3"></p>
     </form>
   </div>
 </section>
+
+<script>
+document.getElementById('contactForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const form = e.target, btn = document.getElementById('submitBtn'), status = document.getElementById('formStatus');
+  const data = Object.fromEntries(new FormData(form).entries());
+  btn.disabled = true; btn.textContent = 'Sending...'; btn.classList.add('opacity-70');
+  status.classList.add('hidden');
+  try {
+    const res = await fetch('https://superagent-afff3efc.base44.app/functions/submitContactForm', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data)
+    });
+    const out = await res.json();
+    if (res.ok && out.ok) {
+      status.textContent = out.message; status.className = 'text-center text-sm font-medium rounded-lg px-4 py-3 bg-green-500/20 text-green-300';
+      form.reset();
+    } else {
+      throw new Error(out.error || 'Something went wrong.');
+    }
+  } catch (err) {
+    status.textContent = err.message || 'Something went wrong. Please try again.';
+    status.className = 'text-center text-sm font-medium rounded-lg px-4 py-3 bg-red-500/20 text-red-300';
+  }
+  btn.disabled = false; btn.textContent = 'Send Message'; btn.classList.remove('opacity-70');
+});
+</script>
 
 <!-- Footer -->
 <footer class="bg-stone-800 text-stone-400 text-center text-sm py-8">
