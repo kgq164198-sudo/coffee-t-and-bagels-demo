@@ -6,10 +6,7 @@
 <title>Coffee T and Bagels — Coffee & Fresh-Baked Bagels in Hell's Kitchen</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-<style>
-  body { font-family: 'Inter', sans-serif; }
-  h1, h2, .display { font-family: 'Playfair Display', serif; }
-</style>
+<link rel="stylesheet" href="styles.css">
 </head>
 <body class="bg-stone-50 text-stone-800">
 
@@ -48,7 +45,7 @@
 </defs></svg>
 
 <!-- Nav -->
-<nav class="sticky top-0 z-40 bg-stone-900/95 backdrop-blur text-stone-100">
+<nav id="siteNav" class="sticky top-0 z-40 bg-stone-900/95 backdrop-blur text-stone-100">
   <div class="max-w-6xl mx-auto px-4 py-2.5 flex items-center justify-between">
     <a href="#" class="flex items-center gap-3">
       <svg viewBox="0 0 200 200" class="w-11 h-11 rounded-full"><use href="#ct-logo"/></svg>
@@ -61,7 +58,18 @@
       <a href="#reviews" class="hover:text-amber-300">Reviews</a>
       <a href="#contact" class="hover:text-amber-300">Contact</a>
     </div>
-    <a href="https://wa.me/19297291649" target="_blank" class="bg-amber-500 hover:bg-amber-400 text-stone-900 font-semibold text-sm px-4 py-2 rounded-full">Order on WhatsApp</a>
+    <a href="https://wa.me/19297291649" target="_blank" class="hidden sm:inline-block bg-amber-500 hover:bg-amber-400 text-stone-900 font-semibold text-sm px-4 py-2 rounded-full">Order on WhatsApp</a>
+      <button id="menuBtn" aria-label="Open menu" class="md:hidden p-2 rounded-lg hover:bg-stone-800">
+        <svg viewBox="0 0 24 24" class="w-6 h-6 fill-current"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg>
+      </button>
+  </div>
+  <div id="mobileMenu" class="hidden md:hidden px-4 pb-3 space-y-1 text-sm font-medium">
+    <a href="#story" class="block py-2 hover:text-amber-300">Our Story</a>
+    <a href="#menu" class="block py-2 hover:text-amber-300">Menu</a>
+    <a href="#gallery" class="block py-2 hover:text-amber-300">Gallery</a>
+    <a href="#reviews" class="block py-2 hover:text-amber-300">Reviews</a>
+    <a href="#contact" class="block py-2 hover:text-amber-300">Contact</a>
+    <a href="https://wa.me/19297291649" target="_blank" class="block py-2 text-amber-300 font-semibold">Order on WhatsApp</a>
   </div>
 </nav>
 
@@ -216,36 +224,12 @@
   </div>
 </section>
 
-<script>
-document.getElementById('contactForm').addEventListener('submit', async (e) => {
-  e.preventDefault();
-  const form = e.target, btn = document.getElementById('submitBtn'), status = document.getElementById('formStatus');
-  const data = Object.fromEntries(new FormData(form).entries());
-  btn.disabled = true; btn.textContent = 'Sending...'; btn.classList.add('opacity-70');
-  status.classList.add('hidden');
-  try {
-    const res = await fetch('https://superagent-afff3efc.base44.app/functions/submitContactForm', {
-      method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data)
-    });
-    const out = await res.json();
-    if (res.ok && out.ok) {
-      status.textContent = out.message; status.className = 'text-center text-sm font-medium rounded-lg px-4 py-3 bg-green-500/20 text-green-300';
-      form.reset();
-    } else {
-      throw new Error(out.error || 'Something went wrong.');
-    }
-  } catch (err) {
-    status.textContent = err.message || 'Something went wrong. Please try again.';
-    status.className = 'text-center text-sm font-medium rounded-lg px-4 py-3 bg-red-500/20 text-red-300';
-  }
-  btn.disabled = false; btn.textContent = 'Send Message'; btn.classList.remove('opacity-70');
-});
-</script>
+<script src="script.js" defer></script>
 
 <!-- Footer -->
 <footer class="bg-stone-800 text-stone-400 text-center text-sm py-8">
   <svg viewBox="0 0 200 200" class="w-14 h-14 rounded-full mx-auto mb-3"><use href="#ct-logo"/></svg>
-  <p>© 2026 Coffee T and Bagels · 637 10th Ave, New York, NY 10036 · (929) 729-1649</p>
+  <p>© <span id="year">2026</span> Coffee T and Bagels · 637 10th Ave, New York, NY 10036 · (929) 729-1649</p>
   <p class="text-xs text-stone-500 mt-2">Demo site — preview by your web designer</p>
 </footer>
 
