@@ -1,15 +1,63 @@
-/* Coffee T and Bagels — site styles */
-html { scroll-behavior: smooth; }
-body { font-family: 'Inter', sans-serif; }
-h1, h2, .display { font-family: 'Playfair Display', serif; }
+/* ============================================================
+   Coffee T and Bagels — site styles
+   ============================================================ */
+html { scroll-behavior: smooth; scroll-padding-top: 84px; }
+body { font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; }
+h1, h2, .display { font-family: 'Playfair Display', serif; letter-spacing: -0.015em; }
 
 ::selection { background: #f59e0b; color: #1c1917; }
 
-/* Nav shadow when scrolled */
-#siteNav { transition: box-shadow .3s ease; }
-#siteNav.nav-scrolled { box-shadow: 0 4px 18px rgba(0,0,0,.35); }
+/* ---- Navigation ---- */
+#siteNav { transition: transform .35s ease, box-shadow .3s ease, background-color .3s ease; }
+#siteNav.nav-scrolled { box-shadow: 0 4px 24px rgba(0,0,0,.35); background-color: rgba(28,25,23,.94); }
+#siteNav.nav-hidden { transform: translateY(-100%); }
+#mobileMenu { animation: menuDown .25s ease both; }
+@keyframes menuDown { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }
 
-/* Fade-in on scroll (added by JS only, so no-JS visitors see everything) */
-.anim { opacity: 0; transform: translateY(18px); transition: opacity .6s ease, transform .6s ease; }
+/* ---- Buttons & links ---- */
+a.rounded-full, #submitBtn {
+  transition: transform .18s ease, box-shadow .18s ease,
+              background-color .18s ease, color .18s ease, border-color .18s ease;
+}
+a.rounded-full:hover, #submitBtn:not(:disabled):hover { transform: translateY(-2px); box-shadow: 0 10px 22px rgba(0,0,0,.18); }
+a.rounded-full:active, #submitBtn:not(:disabled):active { transform: translateY(0) scale(.98); box-shadow: none; }
+:is(a, button):focus-visible { outline: 2px solid #f59e0b; outline-offset: 3px; border-radius: 6px; }
+#submitBtn:disabled { cursor: wait; }
+
+/* ---- Hero entrance ---- */
+@keyframes fadeUp { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: none; } }
+.hero-fade { animation: fadeUp .8s cubic-bezier(.22,.61,.36,1) both; }
+.hero-fade-1 { animation-delay: .05s } .hero-fade-2 { animation-delay: .18s }
+.hero-fade-3 { animation-delay: .31s } .hero-fade-4 { animation-delay: .44s }
+
+/* ---- Scroll-in reveal (classes added by JS) ---- */
+.anim { opacity: 0; transform: translateY(24px);
+        transition: opacity .65s ease, transform .65s cubic-bezier(.22,.61,.36,1); }
 .anim.in-view { opacity: 1; transform: none; }
-@media (prefers-reduced-motion: reduce) { .anim { transition: none; opacity: 1; transform: none; } }
+
+/* ---- Cards ---- */
+#menu .grid > div, #reviews .grid > div { transition: transform .25s ease, box-shadow .25s ease; }
+#menu .grid > div:hover, #reviews .grid > div:hover { transform: translateY(-6px); box-shadow: 0 16px 32px rgba(28,25,23,.12); }
+#menu .grid img { transition: transform .5s ease; }
+#menu .grid > div:hover img { transform: scale(1.06); }
+
+/* ---- Gallery & lightbox ---- */
+#gallery img { cursor: zoom-in; transition: transform .35s ease, box-shadow .35s ease; }
+#gallery img:hover { transform: scale(1.03); box-shadow: 0 14px 30px rgba(28,25,23,.18); position: relative; z-index: 1; }
+#lightbox { position: fixed; inset: 0; z-index: 60; display: flex; align-items: center; justify-content: center;
+            background: rgba(12,10,9,.93); cursor: zoom-out; animation: lbFade .25s ease both; padding: 1rem; }
+#lightbox img { max-width: min(92vw, 1000px); max-height: 86vh; border-radius: 14px;
+                box-shadow: 0 30px 80px rgba(0,0,0,.5); animation: lbZoom .3s cubic-bezier(.22,.61,.36,1) both; }
+#lightbox .lb-close { position: absolute; top: 14px; right: 22px; font-size: 34px; line-height: 1;
+                      color: #f5f5f4; background: none; border: none; cursor: pointer; }
+#lightbox .lb-caption { position: absolute; bottom: 20px; left: 0; right: 0; text-align: center;
+                        color: #d6d3d1; font-size: .85rem; }
+@keyframes lbFade  { from { opacity: 0 } to { opacity: 1 } }
+@keyframes lbZoom  { from { transform: scale(.94); opacity: .4 } to { transform: scale(1); opacity: 1 } }
+
+/* ---- Accessibility: reduced motion ---- */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .anim, .hero-fade, #mobileMenu, #lightbox, #lightbox img { transition: none !important; animation: none !important; opacity: 1 !important; transform: none !important; }
+  #gallery img, #menu .grid > div, #menu .grid img, #reviews .grid > div, a.rounded-full, #submitBtn { transition: none !important; }
+}
